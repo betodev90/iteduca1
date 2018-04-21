@@ -1,0 +1,23 @@
+{% extends 'base_curso.html' %}
+
+{% block head-titulo %}
+    Inicio al sistema
+{% endblock %}
+
+{% block contenido %}
+
+    {% if request.user.is_authenticated %}
+          <li>
+              <a href="{% url 'logout' %}">Cerrar Sesión</a>
+          </li>
+      {% else %}
+          <li>
+              <a href="{% url 'login' %}">Iniciar Sesión</a>
+          </li>
+    {% endif %}
+
+{% endblock %}
+
+{% block title-container %}
+    Cursos disponibles
+{% endblock %}

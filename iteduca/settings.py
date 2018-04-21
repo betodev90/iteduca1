@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # Aplicaciones locales
     'courses',
-
+    'accounts',
 ]
 
 MIDDLEWARE = [
