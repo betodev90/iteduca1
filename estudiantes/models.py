@@ -11,8 +11,8 @@ def url(self, filename):
 
 class Estudiante(User):
     SEXO_OPCIONES = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino'),
+        ('m', 'Masculino'),
+        ('f', 'Femenino'),
     )
     ESTADO_CIVIL_OPCIONES = (
         ('s', 'Soltero(a)'),
@@ -30,7 +30,7 @@ class Estudiante(User):
 
     nombres = models.CharField(max_length=250)
     apellidos = models.CharField(max_length=250)
-    sexo    = models.CharField(max_length=220, choices=SEXO_OPCIONES)
+    sexo    = models.CharField(max_length=150, choices=SEXO_OPCIONES)
     # No olvidar instalar la dependencia de imagenes / Pillow
     foto    = models.ImageField(upload_to=url, verbose_name="Imagen", null=True)
     estado_civil = models.CharField(max_length=220, null=True, choices=ESTADO_CIVIL_OPCIONES)
