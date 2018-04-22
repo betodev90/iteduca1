@@ -5,18 +5,8 @@
 {% endblock %}
 
 {% block contenido %}
-    {% if request.user.is_authenticated %}
-          <li>
-              <a href="{% url 'logout' %}">Cerrar Sesión</a>
-          </li>
-      {% else %}
-          <li>
-              <a href="{% url 'login' %}">Iniciar Sesión</a>
-          </li>
-    {% endif %}
-
-
     {% include 'fragmentos/messages.html' %}
+
 
 {% endblock %}
 
