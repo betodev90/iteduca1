@@ -8,8 +8,8 @@ from .validaciones_form import validador_solo_letras, validador_solo_espacios_va
 
 alphanumeric = RegexValidator(r'^[a-zA-Z]+$', 'Only alphanumeric characters are allowed.')
 SEXO_OPCIONES = (
-    ('M', 'Masculino'),
-    ('F', 'Femenino'),
+    ('m', 'Masculino'),
+    ('f', 'Femenino'),
 )
 
 
@@ -18,9 +18,9 @@ class FormEstudiante(forms.Form):
     apellidos = forms.CharField(max_length=100, label=u"Apellidos")
     usuario = forms.CharField(min_length=4, max_length=20, label=u"Usuario")
     contrasenia = forms.CharField(
-        widget=forms.PasswordInput(), label=u"Contraseña", max_length=24
+        widget=forms.PasswordInput(), label=u"Clave", max_length=24
     )
-    comfirma_contrasenia = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Contraseña", max_length=24)
+    comfirma_contrasenia = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Clave", max_length=24)
     fecha_nac = forms.DateField(label=u"Fecha Nacimiento", widget=forms.DateInput(format=("%Y-%m-%d")))
     telefono = forms.CharField(label=u"Teléfono", max_length=12,
                                validators=[validador_solo_espacios_vacios], required=False
@@ -29,7 +29,7 @@ class FormEstudiante(forms.Form):
     email = forms.EmailField(label=u"Email")
     estado_civil = forms.ChoiceField(choices='', widget=forms.RadioSelect(),
                                      label=u"Estado Cívil", required=False)
-    sexo = forms.ChoiceField(choices=SEXO_OPCIONES)
+    # sexo = forms.ChoiceField(choices=SEXO_OPCIONES)
     foto = forms.ImageField(required=False, label=u"Foto")
     facebook = forms.CharField(required=False, max_length=100, label="Facebook")
 
@@ -53,7 +53,7 @@ class FormEstudiante(forms.Form):
         elif password1 != password2:
             raise forms.ValidationError("Error: lContraseñas diferentes")
 
-        return self.cleaned_data
+        return password1
 
     def clean_fecha_nac(self):
         fecha_nac = self.cleaned_data.get('fecha_nac')

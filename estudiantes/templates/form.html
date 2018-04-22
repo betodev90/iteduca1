@@ -6,7 +6,7 @@
     <h2>Nuevo Estudiante</h2>
     {% include 'fragmentos/messages.html' %}
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         {% for field in form.visible_fields %}
@@ -23,7 +23,7 @@
           <button type="submit" class="btn btn-success">
             <span class="glyphicon glyphicon-ok"></span> Save
           </button>
-          <a href="#" class="btn btn-default">Cancel</a>
+          <a href="{% url 'lista_estudiantes' %}" class="btn btn-default">Cancel</a>
         </div>
 
     </form>

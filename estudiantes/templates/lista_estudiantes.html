@@ -1,0 +1,100 @@
+{% extends 'base_curso.html' %}
+
+{% block head-titulo %}
+    Lista de estudiantes
+{% endblock %}
+
+{% block contenido %}
+    <h3>estudiantes</h3>
+    <hr>
+    <div class="row">
+        {# Formulario de busqueda #}
+        <form method="get">
+            <div class="form-row">
+                <div>
+                    <input name="q" class="form-control" placeholder="Escribe los parametros de busqueda" id="buscador">
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Busqueda</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 offset-md-8">
+            <a href="{% url 'registrar_estudiante' %}" class="btn btn-primary">
+                Agregar nuevo estudiante
+            </a>
+        </div>
+    </div>
+    <hr />
+
+    <br>
+
+    <table class="table">
+
+        <thead class="thead-light">
+            <tr>
+              <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
+              <th scope="col">Fecha Nacimiento</th>
+              <th scope="col">Email</th>
+              <th scope="col">Estado</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for estudiante in estudiantes %}
+                <tr>
+                    <td>{{ estudiante.nombres }}</td>
+                    <td>{{ estudiante.apellidos }}</td>
+                    <td>{{ estudiante.fecha_nacimiento|date:"M d, Y" }}</td>
+                    <td>{{ estudiante.email }}</td>
+                    <td>{{ estudiante.estado }}</td>
+                    <td class="text-center">
+                        <div class="btn-group mr30">
+                            <a class="btn btn-primary active"
+                                    href="{% url 'editar_estudiante' estudiante.pk %}">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-danger" href="#">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <h4>No existe información que mostrar en la busqueda/lista</h4>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% if estudiantes.has_other_pages %}
+
+      <ul class="pagination">
+
+        {% if estudiantes.has_previous %}
+            <li><a href="?page={{ estudiantes.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+
+        {% for i in estudiantes.paginator.page_range %}
+          {% if estudiantes.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if estudiantes.has_next %}
+          <li><a href="?page={{ estudiantes.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+
+      </ul>
+
+    {% endif %}
+
+{% endblock %}

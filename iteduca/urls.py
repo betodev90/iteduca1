@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from courses.views import index, lista_cursos
-from estudiantes.views import registrar_estudiante
+from estudiantes.views import registrar_estudiante, editar_estudiante, lista_estudiantes
 from accounts.views import login_view, logout_view
 
 urlpatterns = [
@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'^cursos/$', lista_cursos, name='lista_cursos'),
 
     # estudiante
+    url(r'^estudiantes/$', lista_estudiantes, name='lista_estudiantes'),
     url(r'^estudiantes/nuevo/$', registrar_estudiante, name='registrar_estudiante'),
+    url(r'^estudiantes/editar/(?P<pk>\d+)/$', editar_estudiante, name='editar_estudiante')
+
 ]

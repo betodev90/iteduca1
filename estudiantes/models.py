@@ -22,19 +22,17 @@ class Estudiante(User):
         ('v', 'Viudo(a)'),
     )
     ESTADOS_OPCIONES = (
-        (0, u'Pendiente'),
-        (1, u'Activo'),
-        (2, u'Inactivado'),
-        (3, u'Eliminado'),
+        (0, 'Pendiente'),
+        (1, 'Activo'),
+        (2, 'Inactivado'),
+        (3, 'Eliminado'),
     )
 
     nombres = models.CharField(max_length=250)
     apellidos = models.CharField(max_length=250)
-    sexo    = models.CharField(max_length=150, choices=SEXO_OPCIONES)
     # No olvidar instalar la dependencia de imagenes / Pillow
     foto    = models.ImageField(upload_to=url, verbose_name="Imagen", null=True)
-    estado_civil = models.CharField(max_length=220, null=True, choices=ESTADO_CIVIL_OPCIONES)
-    fecha_nacimiento    = models.DateField(auto_now_add=True)
+    fecha_nacimiento    = models.DateField()
     facebook            = models.CharField(max_length=220, null=True, blank=True)
     direccion           = models.CharField(max_length=220, null=True, blank=True)
     telefono            = models.CharField(max_length=220, null=True, blank=True)

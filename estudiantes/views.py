@@ -8,17 +8,24 @@ from estudiantes.models import Estudiante
 def registrar_estudiante(request):
     form = FormEstudiante()
     if request.method == 'POST':
-        form = FormEstudiante(request.POST)
+        form = FormEstudiante(request.POST, request.FILES)
         print("Errores: ", form.errors)
         if form.is_valid():
             print('Ingreso')
             data = form.cleaned_data
-            print(data.get('sexo'))
-            Estudiante.objects.create(email=data.get('email'), nombres=data.get('nombres'),
-                                      apellidos=data.get('apellidos'), username=data.get('usuario'),
-                                      password=data.get('contrasenia'), fecha_nacimiento=data.get("fecha_nac"),
-                                      sexo=data.get('sexo')
-                                      )
+            Estudiante.objects.create(
+                email=data.get('email'), nombres=data.get('nombres'),
+                apellidos=data.get('apellidos'), username=data.get('usuario'),
+                password=data.get('contrasenia'), fecha_nacimiento=data.get("fecha_nac"),
+            )
+            # estudiante = Estudiante()
+            # estudiante.nombres = data.get('nombres')
+            # estudiante.apellidos = data.get('apellidos')
+            # estudiante.username = data.get('usuario')
+            # estudiante.password = data.get('contrasenia')
+            # print(data.get('fecha_nac'))
+            # estudiante.fecha_nacimiento = data.get("fecha_nac")
+            # estudiante.save()
             messages.success(request, "Se ha creado exitosamente un estudiante")
             return redirect('inicio')
 
@@ -33,3 +40,34 @@ def registrar_estudiante(request):
                     i.field.widget.attrs['class'] = 'danger'
 
     return render(request, 'form.html', {'form': form})
+
+
+def editar_estudiante(request, pk):
+    """Editar estudiante"""
+
+    estudiante = Estudiante.objects.get(pk=pk)
+
+    form = FormEstudiante(initial={
+        'nombres': estudiante.nombres,
+        'apellidos': estudiante.apellidos,
+        'fecha_nac': estudiante.fecha_nacimiento,
+        'email': estudiante.email,
+    })
+    if request.method == 'POST':
+        form = FormEstudiante(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+            estudiante.nombres = data.get('nombres')
+            estudiante.apellidos = data.get('apellidos')
+            estudiante.save()
+
+            messages.success(request, "Se realizo el cambio exitosamente")
+            return redirect("inicio")
+        else:
+            messages.error(request, "")
+    return render(request, 'form.html', {'form': form})
+
+
+def lista_estudiantes(request):
+    estudiantes = Estudiante.objects.all()
+    return render(request, 'lista_estudiantes.html', context={'estudiantes': estudiantes})
