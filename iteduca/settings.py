@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Aplicaciones locales
     'courses',
     'accounts',
+    # Aplicaciones de terceros
 ]
 
 MIDDLEWARE = [
@@ -54,11 +55,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'iteduca.urls'
-
+print(os.path.join(BASE_DIR, 'templates'))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'iteduca/templates')],  # Agregamos la ruta para organizar htmls
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
