@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^estudiantes/$', lista_estudiantes, name='lista_estudiantes'),
     url(r'^estudiantes/nuevo/$', registrar_estudiante, name='registrar_estudiante'),
     url(r'^estudiantes/editar/(?P<pk>\d+)/$', editar_estudiante, name='editar_estudiante')
+    # TODO: Eliminar
 
 ]
