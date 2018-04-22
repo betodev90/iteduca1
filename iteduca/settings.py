@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Aplicaciones locales
     'courses',
     'accounts',
+    'estudiantes',
     # Aplicaciones de terceros
 ]
 
