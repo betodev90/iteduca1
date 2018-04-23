@@ -6,14 +6,17 @@ from django.core.validators import RegexValidator
 
 from .validaciones_form import validador_solo_letras, validador_solo_espacios_vacios
 
-alphanumeric = RegexValidator(r'^[a-zA-Z]+$', 'Only alphanumeric characters are allowed.')
-SEXO_OPCIONES = (
-    ('m', 'Masculino'),
-    ('f', 'Femenino'),
-)
+
+class EstudiantesModelForm(forms.ModelForm):
+    """"""
+
 
 
 class FormEstudiante(forms.Form):
+    SEXO_OPCIONES = (
+        ('m', 'Masculino'),
+        ('f', 'Femenino'),
+    )
     nombres = forms.CharField(max_length=100, label=u"Nombres")
     apellidos = forms.CharField(max_length=100, label=u"Apellidos")
     usuario = forms.CharField(min_length=4, max_length=20, label=u"Usuario")

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
 
 from .models import Curso
 
@@ -30,3 +31,17 @@ def lista_cursos(request):
     except EmptyPage:
         cursos = paginator.page(paginator.num_pages)
     return render(request, 'list_cursos.html', context={'cursos': cursos})
+
+
+class ListaCursosView(ListView):
+    """Vista Basda en Clase , controlador de Django para listar objetos de la clase Curso"""
+    model = Curso
+    # Template a utilizar para renderizar
+    template_name = 'list_cursos.html'
+    # Le indica que nombre lo va a llamar desde el template si no asignamos el atributo 'context_object_name' asume
+    # que en el template tiene que estar la variable {{ object_list }}
+    context_object_name = 'cursos'
+    # Query consulta filtrado
+    queryset = Curso.objects.all()
+    # Indica cuando se quiere aplicar paginacion
+    paginate_by = 10

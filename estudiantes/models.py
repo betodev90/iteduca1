@@ -27,20 +27,22 @@ class Estudiante(User):
         (2, 'Inactivado'),
         (3, 'Eliminado'),
     )
-
     nombres = models.CharField(max_length=250)
     apellidos = models.CharField(max_length=250)
     # No olvidar instalar la dependencia de imagenes / Pillow
-    foto    = models.ImageField(upload_to=url, verbose_name="Imagen", null=True)
-    fecha_nacimiento    = models.DateField()
-    facebook            = models.CharField(max_length=220, null=True, blank=True)
-    direccion           = models.CharField(max_length=220, null=True, blank=True)
-    telefono            = models.CharField(max_length=220, null=True, blank=True)
-    es_admin            = models.BooleanField(default=False)
+    foto = models.ImageField(upload_to=url, verbose_name="Imagen", null=True)
+    fecha_nacimiento = models.DateField()
+    facebook = models.CharField(
+        max_length=220, null=True, blank=True,
+        help_text='Ingrese el nombre de su cuenta en fb'
+    )
+    direccion = models.CharField(max_length=220, null=True, blank=True)
+    telefono = models.CharField(max_length=220, null=True, blank=True)
+    es_admin = models.BooleanField(default=False)
 
-    estado              = models.PositiveIntegerField(choices=ESTADOS_OPCIONES, default=1)
-    fecha_creacion  =   models.DateTimeField(auto_now_add=True)
-    fecha_actualizacion  =   models.DateTimeField(auto_now=True)
+    estado = models.PositiveIntegerField(choices=ESTADOS_OPCIONES, default=1)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
     usuario_creacion = models.CharField(max_length=50)
     usuario_actualizacion = models.CharField(max_length=50)
 

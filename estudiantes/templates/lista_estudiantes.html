@@ -56,7 +56,7 @@
                                     href="{% url 'editar_estudiante' estudiante.pk %}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-danger" href="#">
+                            <a class="btn btn-danger" href="{% url 'eliminar_estudiante' estudiante.pk %}">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </div>

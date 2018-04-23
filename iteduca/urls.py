@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from courses.views import index, lista_cursos
-from estudiantes.views import registrar_estudiante, editar_estudiante, lista_estudiantes
+from courses.views import index, lista_cursos, ListaCursosView
+from estudiantes.views import registrar_estudiante, editar_estudiante, lista_estudiantes, eliminar_estudiante, \
+    ListaEstudiantesView, NuevoEstudiantesView
 from accounts.views import login_view, logout_view
 
 urlpatterns = [
@@ -27,11 +28,21 @@ urlpatterns = [
 
     # cursos
     url(r'^cursos/$', lista_cursos, name='lista_cursos'),
+    # URLs para vistas basadas en funcion
+    url(r'^lista/cursos/$', ListaCursosView.as_view(), name='list_courses'),
 
-    # estudiante
+
+
+    # estudiantes
+    # URLs para vistas basadas en funcion
     url(r'^estudiantes/$', lista_estudiantes, name='lista_estudiantes'),
     url(r'^estudiantes/nuevo/$', registrar_estudiante, name='registrar_estudiante'),
-    url(r'^estudiantes/editar/(?P<pk>\d+)/$', editar_estudiante, name='editar_estudiante')
-    # TODO: Eliminar
+    url(r'^estudiantes/editar/(?P<pk>\d+)/$', editar_estudiante, name='editar_estudiante'),
+    url(r'^estudiantes/eliminar/(?P<pk>\d+)/$', eliminar_estudiante, name='eliminar_estudiante'),
 
+    # URLs para vistas basadas en clases para su revision colocar el patron de url que hace llamado a la otra forma
+    # de declarar vistas
+    url(r'^lista/estudiantes/$', ListaEstudiantesView.as_view(), name='list_student'),
+    url(r'^nuevo/estudiantes/$', NuevoEstudiantesView.as_view(), name='create_student'),
+    url(r'^editar/estudiantes(?P<pk>\d+)/$', editar_estudiante, name='edit_student'),
 ]
