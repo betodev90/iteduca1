@@ -23,7 +23,7 @@ def registrar_estudiante(request):
             Estudiante.objects.create(
                 email=data.get('email'), nombres=data.get('nombres'),
                 apellidos=data.get('apellidos'), username=data.get('usuario'),
-                password=data.get('contrasenia'), fecha_nacimiento=data.get("fecha_nac"),
+                password=data.get('contrasenia'), fecha_nacimiento=data.get("fecha_nac"), sexo=data.get('sexo')
             )
             # Nueva Alternativa para crear un nuevo objeto Estudiante
             # estudiante = Estudiante()

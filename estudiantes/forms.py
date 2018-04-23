@@ -2,37 +2,28 @@ from django import forms
 from django.contrib.auth.models import User
 import datetime
 
-from django.core.validators import RegexValidator
-
-from .validaciones_form import validador_solo_letras, validador_solo_espacios_vacios
-
 
 class EstudiantesModelForm(forms.ModelForm):
     """"""
 
 
-
 class FormEstudiante(forms.Form):
     SEXO_OPCIONES = (
-        ('m', 'Masculino'),
-        ('f', 'Femenino'),
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
     )
     nombres = forms.CharField(max_length=100, label=u"Nombres")
     apellidos = forms.CharField(max_length=100, label=u"Apellidos")
     usuario = forms.CharField(min_length=4, max_length=20, label=u"Usuario")
-    contrasenia = forms.CharField(
-        widget=forms.PasswordInput(), label=u"Clave", max_length=24
-    )
+    contrasenia = forms.CharField(widget=forms.PasswordInput(), label=u"Clave", max_length=24)
     comfirma_contrasenia = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Clave", max_length=24)
     fecha_nac = forms.DateField(label=u"Fecha Nacimiento", widget=forms.DateInput(format=("%Y-%m-%d")))
-    telefono = forms.CharField(label=u"Teléfono", max_length=12,
-                               validators=[validador_solo_espacios_vacios], required=False
-                               )
-    direccion = forms.CharField(label=u"Dirección", validators=[validador_solo_espacios_vacios], required=False)
+    telefono = forms.CharField(label=u"Teléfono", max_length=12, required=False)
+    direccion = forms.CharField(label=u"Dirección", required=False)
     email = forms.EmailField(label=u"Email")
     estado_civil = forms.ChoiceField(choices='', widget=forms.RadioSelect(),
                                      label=u"Estado Cívil", required=False)
-    # sexo = forms.ChoiceField(choices=SEXO_OPCIONES)
+    sexo = forms.ChoiceField(choices=SEXO_OPCIONES)
     foto = forms.ImageField(required=False, label=u"Foto")
     facebook = forms.CharField(required=False, max_length=100, label="Facebook")
 
@@ -67,31 +58,25 @@ class FormEstudiante(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if User.objects.filter(is_active=True).filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Error: El email ya esta asignado a otro usuario")
         return email
 
     def clean_usuario(self):
         usuario = self.cleaned_data.get('usuario')
-        if User.objects.filter(username=usuario, is_active=True).exists():
+        if User.objects.filter(username=usuario).exists():
             msg = "El usuario ya ha sido ingresado"
             raise forms.ValidationError(msg)
-            # self.add_error("usuario", "Error: El usuario ya ha sido ingresado.")
-            # self.fields['usuario'].widget.attrs['title'] = self._errors["usuario"]
-            # raise forms.ValidationError(
-            #    "Error: El usuario ya ha sido ingresado.")
         return usuario
 
     def clean_apellidos(self):
         apellidos = self.cleaned_data.get('apellidos')
-
         if apellidos:
             cont = 0
             letras = str(apellidos).split(" ")
             for i in letras:
                 if not i.isalpha():
                     cont += 1
-
             if cont == 0:
                 return apellidos
             else:
