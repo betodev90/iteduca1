@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
+from django.contrib import messages
 
 from .forms import FormEstudiante
-from django.contrib import messages
 from estudiantes.models import Estudiante
-# Create your views here.
+
+# Apartado de VBF ( Vista Basadas en Función )
 
 
 @login_required(login_url='/login')
