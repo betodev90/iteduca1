@@ -18,7 +18,7 @@ from django.contrib import admin
 from courses.views import index, lista_cursos, ListaCursosView
 from estudiantes.views import registrar_estudiante, editar_estudiante, lista_estudiantes, eliminar_estudiante, \
     ListaEstudiantesView, NuevoEstudiantesView
-from accounts.views import login_view, logout_view
+from accounts.views import login_view, logout_view, change_password
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

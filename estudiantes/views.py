@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
@@ -96,9 +98,9 @@ def eliminar_estudiante(request, pk):
             else:
                 messages.info(request, "El estudiante ya se encuentra eliminado")
         return redirect('lista_estudiantes')
-    except Estudiante.DoesNotExist:  # Manejo de Excepcion si no encuentra el objecto similar al Try catch de Java
+    except Estudiante.DoesNotExist:  # Manejo de Excepcion si no encuentra el objecto, similar al Try catch de Java
         # Si ingresa a este bloque es porque accedió a la excepcion, es decir no encontró al objecto Estudiante con ese
-        # pk enviando en la vista como parametro
+        # pk enviando en la vista.
         messages.error(
             request, "El estudiante seleccionado no se encuentra en el sistema, favor verifique con el admin"
         )
@@ -108,14 +110,26 @@ def eliminar_estudiante(request, pk):
 @login_required(login_url='/login')
 def lista_estudiantes(request):
     """"""
-    estudiantes = Estudiante.objects.filter(estado=1)   # estudiantes activos
+    q = request.GET.get('q', '')
+    querys = (Q(nombres__icontains=q) | Q(apellidos__icontains=q) | Q(email__exact=q))
+    estudiantes = Estudiante.objects.filter(estado=1).filter(querys)   # estudiantes activos
+    page = request.GET.get('page', 1)
+    paginator = Paginator(estudiantes, 10)
+    try:
+        estudiantes = paginator.page(page)
+    except PageNotAnInteger:
+        estudiantes = paginator.page(1)
+    except EmptyPage:
+        estudiantes = paginator.page(paginator.num_pages)
     return render(request, 'lista_estudiantes.html', context={'estudiantes': estudiantes})
 
 # Apartado de VBC ( Vista Basadas en clase )
 
 
 class ListaEstudiantesView(ListView):
-    """Vista Basda en Clase , controlador de Django para listar objetos de la clase Estudiante"""
+    """Vista Basda en Clase , controlador de Django para listar objetos de la clase Estudiante
+        NOTA: Realiza el mismo proceso que la vista 'lista_estudiantes'
+    """
     model = Estudiante
     # Template a utilizar para renderizar
     template_name = 'lista_estudiantes.html'
@@ -126,6 +140,13 @@ class ListaEstudiantesView(ListView):
     queryset = Estudiante.objects.filter(estado=1)  # estudiantes activos
     # Indica cuando se quiere aplicar paginacion
     paginate_by = 10
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        # parametros de filtro | busqueda
+        querys = (Q(nombres__icontains=q) | Q(apellidos__icontains=q) | Q(email__exact=q))
+        object_list = Estudiante.objects.filter(querys)
+        return object_list
 
 
 class NuevoEstudiantesView(CreateView):

@@ -6,32 +6,40 @@
 
 {% block contenido %}
     <h3>Cursos</h3>
-    <hr>
-    <div class="row">
-        {# Formulario de busqueda #}
-        <form method="get">
-            <div class="form-row">
-                <div>
-                    <input name="q" class="form-control" placeholder="Escribe los parametros de busqueda" id="buscador">
-                </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Busqueda</button>
-        </form>
-    </div>
 
+    {# Controles formulario de busqueda y boton de Agregar #}
     <div class="row">
-        <div class="col-md-4 offset-md-8">
+        <div class="col-md-8">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <!-- /.navbar-collapse -->
+                    <div class="container searchbardiv" id="formsearch">
+                        <form role="search" method="get" id="searchform">
+                            <div class="input-group">
+                                <input name="q" class="form-control" placeholder="Escribe los parametros de busqueda" id="buscador">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default"  id="searchsubmit"  type="submit">
+                                        <strong>Busqueda</strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+        </div>
+        <div class="col-md-4">
             <a href="#" class="btn btn-primary">
                 Agregar nuevo curso
             </a>
         </div>
     </div>
     <hr />
-
     <br>
 
+    {# Tabla lista de objetos #}
     <table class="table">
-
         <thead class="thead-light">
             <tr>
               <th scope="col">Titulo</th>
@@ -66,7 +74,7 @@
         </tbody>
     </table>
 
-
+    {# Tag de Django que permite incluir fragmentos de html y reutilizarlos enviando un parametro #}
     {% include "fragmentos/pagination.html" with pages_obj=cursos %}
 
 {% endblock %}

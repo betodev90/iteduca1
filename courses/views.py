@@ -33,8 +33,11 @@ def lista_cursos(request):
     return render(request, 'list_cursos.html', context={'cursos': cursos})
 
 
+# Vistas Basadas en Clase (VCB)
 class ListaCursosView(ListView):
-    """Vista Basda en Clase , controlador de Django para listar objetos de la clase Curso"""
+    """Vista Basda en Clase, controlador de Django para listar objetos de la clase Curso
+        NOTA: Realiza el mismo proceso que la vista 'lista_cursos'
+    """
     model = Curso
     # Template a utilizar para renderizar
     template_name = 'list_cursos.html'
@@ -45,3 +48,9 @@ class ListaCursosView(ListView):
     queryset = Curso.objects.all()
     # Indica cuando se quiere aplicar paginacion
     paginate_by = 10
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        querys = (Q(titulo__icontains=q) | Q(asignatura__titulo__icontains=q))
+        object_list = Curso.objects.filter(querys)
+        return object_list

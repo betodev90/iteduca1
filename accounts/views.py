@@ -1,5 +1,6 @@
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from .forms import LoginForm
 
@@ -47,3 +48,25 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def change_password(request):
+    """Vista basada en funcion para cambiar contraseña de un usuario"""
+    if request.method == 'POST':
+        # Declara formulario del core de django para cambiar contrasenia
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            # Actualiza directamente la informacion del usuario debido a que el PasswordChangeForm mapea
+            # el model User de django
+            user = form.save()
+            # Llama al metodo que setea la sesion IMPORTANTE
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Su contraseña ha sido actualizado exitoósamente!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Favor corrija la información del formulario')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
