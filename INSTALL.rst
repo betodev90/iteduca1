@@ -15,7 +15,8 @@ Entorno de Desarrollo
     b) Linux o Mac
         source <name_env>/bin/activate
 
-3.- Acceder a la ruta del proyecto y instalar las dependencias con el comando:
+3.- Acceder a la ruta del proyecto al nivel del fichero `requirements.txt` e instalar las dependencias con el comando:
+
     pip install -r requirements.txt
 
 4.- Verificar el settings.py para su conexion a la base de datos.
