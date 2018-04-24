@@ -110,7 +110,7 @@ def eliminar_estudiante(request, pk):
 
 @login_required(login_url='/login')
 def detalle_estudiante(request, pk):
-    """Cambia de estado al estudiante se le envia por parametro el pk (identificador único de un objeto)"""
+    """Obtiene el objeto a mostrar informacion en detalle le envia por parametro el pk (identificador único de un objeto)"""
     try:
         # Obtiene el objeto Estudiante haciendo la consulta mediante el metodo get(pk=pk)
         estudiante = Estudiante.objects.get(pk=pk)
