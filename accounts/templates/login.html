@@ -13,22 +13,38 @@
     <div class="container">
         {# Llamado a los mensajes #}
         {% include 'fragmentos/messages.html' %}
-        {# formulario para login #}
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form.visible_fields %}
-                <div class="form-group">
-                  {{ field.label_tag }}
-                  {{ field }}
-                </div>
-            {% endfor %}
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok"></span> Log in
-                </button>
-            </div>
-        </form>
+
     </div>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+            <h2 class="text-center text-white mb-4">Bienvenidos a su Sistema IT EDUCA</h2>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card rounded-0">
+                        <div class="card-header">
+                            <h3 class="mb-0">Iniciar Sesión</h3>
+                        </div>
+                        <div class="card-body">
+                            {# formulario para login #}
+                            <form class="form" role="form" autocomplete="off" id="formLogin" novalidate="" method="POST">
+                                {% csrf_token %}
+                                {% for field in form.visible_fields %}
+                                    <div class="form-group">
+                                      {{ field.label_tag }}
+                                      {{ field }}
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
     {# Inluye los scripts #}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>

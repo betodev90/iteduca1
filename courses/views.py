@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 
@@ -33,12 +35,20 @@ def lista_cursos(request):
     return render(request, 'list_cursos.html', context={'cursos': cursos})
 
 
+@login_required(login_url='/login')
+def registrar_curso(request):
+    return render(request, 'create_cursos.html', context={})
+
+
 # Vistas Basadas en Clase (VCB)
-class ListaCursosView(ListView):
+
+class ListaCursosView(LoginRequiredMixin, ListView):
     """Vista Basda en Clase, controlador de Django para listar objetos de la clase Curso
         NOTA: Realiza el mismo proceso que la vista 'lista_cursos'
     """
     model = Curso
+    # Redirect al login si al intentar acceder a esta vista no esta ha hecho login
+    login_url = reverse_lazy('login')
     # Template a utilizar para renderizar
     template_name = 'list_cursos.html'
     # Le indica que nombre lo va a llamar desde el template si no asignamos el atributo 'context_object_name' asume

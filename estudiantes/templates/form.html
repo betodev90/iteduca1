@@ -5,7 +5,7 @@
 
     <h2>Nuevo Estudiante</h2>
     {% include 'fragmentos/messages.html' %}
-
+    {# Como vamos a cargar imagenes de fotos de los estudiantes el formulario debe agregar 'enctype="multipart/form-data' #}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 

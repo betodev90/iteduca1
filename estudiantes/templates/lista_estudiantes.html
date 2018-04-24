@@ -7,6 +7,8 @@
 {% block contenido %}
     <h3>Estudiantes</h3>
     <hr>
+    {# Llamado a los mensajes #}
+    {% include 'fragmentos/messages.html' %}
     {# Controles formulario de busqueda y boton de Agregar #}
     <div class="row">
         <div class="col-md-8">
@@ -56,14 +58,22 @@
                     <td>{{ estudiante.apellidos }}</td>
                     <td>{{ estudiante.fecha_nacimiento|date:"M d, Y" }}</td>
                     <td>{{ estudiante.email }}</td>
-                    <td>{{ estudiante.estado }}</td>
+                    {% if estudiante.estado == 1 %}
+                        <td>Activo</td>
+                    {% elif estudiante.estado == 2 %}
+                        <td>Inactivo</td>
+                    {% endif %}
                     <td class="text-center">
                         <div class="btn-group mr30">
-                            <a class="btn btn-primary active"
+                            <a class="btn btn-primary active" data-toggle="tooltip" data-placement="top" title="Editar"
                                     href="{% url 'editar_estudiante' estudiante.pk %}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
-                            <a class="btn btn-danger" href="{% url 'eliminar_estudiante' estudiante.pk %}">
+                            <a class="btn btn-warning active" data-toggle="tooltip" data-placement="top" title="Ver detalle"
+                                    href="{% url 'view_student' estudiante.pk %}">
+                                <i class="fa fa-id-card" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" href="{% url 'eliminar_estudiante' estudiante.pk %}">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -79,3 +89,13 @@
     {% include "fragmentos/pagination.html" with pages_obj=estudiantes %}
 
 {% endblock %}
+
+{% block extra-js %}
+    <script>
+        {# Script para llamar al metodo tooltip y mostrar un titulo en los iconos de la tabla #}
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+{% endblock %}
+

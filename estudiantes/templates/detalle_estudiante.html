@@ -1,0 +1,21 @@
+{% extends 'base_curso.html' %}
+
+{% block contenido %}
+    <h3>Información del Estudiante</h3>
+    <div class="container">
+        <div class="card" style="width: 18rem; text-align: center">
+            {% if object.foto %}
+                <img class="card-img-top" src="{{ object.foto.url }}" height="200" width="150" alt="Card image cap">
+            {% endif %}
+            <div class="card-body">
+                <p class="card-text">{{ object.nombres }} {{ object.apellidos }}</p>
+                <p class="card-text">{{ object.email }}</p>
+                <p class="card-text">{{ object.fecha_nacimiento|date:"d-m-Y" }}</p>
+                <p class="card-text">{{ object.direccion|default_if_none:"" }}</p>{# |default_if_none: "" si no tiene valor ese campo #}
+            </div>
+        </div>
+        <br>
+        <a href="{% url 'lista_estudiantes' %}" class="btn btn-info">Regresar</a>
+    </div>
+
+{% endblock %}

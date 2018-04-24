@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 from django.contrib import messages
 
 from .forms import FormEstudiante
@@ -21,7 +22,7 @@ def registrar_estudiante(request):
         if form.is_valid():
             data = form.cleaned_data
             Estudiante.objects.create(
-                email=data.get('email'), nombres=data.get('nombres'),
+                email=data.get('email'), nombres=data.get('nombres'), foto=data.get("foto"),
                 apellidos=data.get('apellidos'), username=data.get('usuario'),
                 password=data.get('contrasenia'), fecha_nacimiento=data.get("fecha_nac"), sexo=data.get('sexo')
             )
@@ -71,7 +72,7 @@ def editar_estudiante(request, pk):
             estudiante.save()
 
             messages.success(request, "Se realizo el cambio exitosamente")
-            return redirect("inicio")
+            return redirect("lista_estudiantes")
         else:
             messages.error(request, "")
     return render(request, 'form.html', {'form': form})
@@ -108,6 +109,22 @@ def eliminar_estudiante(request, pk):
 
 
 @login_required(login_url='/login')
+def detalle_estudiante(request, pk):
+    """Cambia de estado al estudiante se le envia por parametro el pk (identificador único de un objeto)"""
+    try:
+        # Obtiene el objeto Estudiante haciendo la consulta mediante el metodo get(pk=pk)
+        estudiante = Estudiante.objects.get(pk=pk)
+        return render(request, 'detalle_estudiante.html', context={'object': estudiante})
+    except Estudiante.DoesNotExist:  # Manejo de Excepcion si no encuentra el objecto, similar al Try catch de Java
+        # Si ingresa a este bloque es porque accedió a la excepcion, es decir no encontró al objecto Estudiante con ese
+        # pk enviando en la vista.
+        messages.error(
+            request, "El estudiante seleccionado no se encuentra en el sistema, favor verifique con el admin"
+        )
+        return redirect('lista_estudiantes')
+
+
+@login_required(login_url='/login')
 def lista_estudiantes(request):
     """"""
     q = request.GET.get('q', '')
@@ -126,11 +143,13 @@ def lista_estudiantes(request):
 # Apartado de VBC ( Vista Basadas en clase )
 
 
-class ListaEstudiantesView(ListView):
+class ListaEstudiantesView(LoginRequiredMixin, ListView):
     """Vista Basda en Clase , controlador de Django para listar objetos de la clase Estudiante
         NOTA: Realiza el mismo proceso que la vista 'lista_estudiantes'
     """
     model = Estudiante
+    # Redirect al login si al intentar acceder a esta vista no esta ha hecho login
+    login_url = reverse_lazy('login')
     # Template a utilizar para renderizar
     template_name = 'lista_estudiantes.html'
     # Le indica que nombre lo va a llamar desde el template si no asignamos el atributo 'context_object_name' asume
@@ -149,10 +168,12 @@ class ListaEstudiantesView(ListView):
         return object_list
 
 
-class NuevoEstudiantesView(CreateView):
+class NuevoEstudiantesView(LoginRequiredMixin, CreateView):
     """Vista Basda en Clase , controlador de Django para crear un nuevo objeto estudiante"""
     # Model del objeto que va a crear la vista
     model = Estudiante
+    # Redirect al login si al intentar acceder a esta vista no esta ha hecho login
+    login_url = reverse_lazy('login')
     # Indica el template a renderizar
     template_name = 'form.html'
     # Mapea los campos del model Estudiantes y los crea como formulario IMPORTANTE en el template que utilizamos debe
@@ -160,3 +181,8 @@ class NuevoEstudiantesView(CreateView):
     fields = ['nombres', 'apellidos', 'fecha_nacimiento', 'username', 'password', 'email', 'facebook']
     # metodo reverse_lazy(<url_name>) para que redireccione una vez agregue el objeto estudiante
     success_url = reverse_lazy('lista_estudiantes')
+
+
+class DetalleEstudianteView(DetailView):
+    model = Estudiante
+    template_name = 'detalle_estudiante.html'

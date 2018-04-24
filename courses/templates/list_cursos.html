@@ -6,7 +6,9 @@
 
 {% block contenido %}
     <h3>Cursos</h3>
-
+    <hr>
+    {# Llamado a los mensajes #}
+    {% include 'fragmentos/messages.html' %}
     {# Controles formulario de busqueda y boton de Agregar #}
     <div class="row">
         <div class="col-md-8">
@@ -30,8 +32,8 @@
             </nav>
         </div>
         <div class="col-md-4">
-            <a href="#" class="btn btn-primary">
-                Agregar nuevo curso
+            <a href="{% url 'registrar_curso' %}" class="btn btn-primary">
+                Agregar Curso
             </a>
         </div>
     </div>
@@ -42,7 +44,7 @@
     <table class="table">
         <thead class="thead-light">
             <tr>
-              <th scope="col">Titulo</th>
+              <th scope="col">Título</th>
                 <th scope="col">Asignatura</th>
               <th scope="col">Descripcion</th>
               <th scope="col">Fecha</th>
